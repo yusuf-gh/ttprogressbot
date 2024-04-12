@@ -85,10 +85,12 @@ def contact1(message):
     else:
         btn = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton(text=buttons.get('share'), request_contact=True))
         bot.send_message(message.chat.id, replys.get('contact'), reply_markup=btn)
-   
-    
-    
-    
-    
-    
+        bot.register_next_step_handler(message, conv_end)
+
+#пасибо за ответ
+def conv_end(message):
+    bot.send_message(message.chat.id, replys.get("thanks"), reply_markup=delete)
+
+
+
 bot.infinity_polling()
