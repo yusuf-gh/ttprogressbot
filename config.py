@@ -61,17 +61,13 @@ def ielts(message):
     
 # обработка данных с функции выше
 def ielts2(message):
-
-    if message.text == 'Ha' or message.text == 'Да':
-        bot.send_message(message.chat.id, replys.get("ielts2"), reply_markup=delete)
-        bot.register_next_step_handler(message, country)
         
-    elif message.text == 'Yoq' or message.text == 'Tayorlanyapman' or message.text =='Нет' or message.text == 'Готовлюсь':
+    if message.text not in ['Ha', 'Да']:
         country(message)
         
     else:
-        bot.send_message(message.chat.id, replys.get('none'))
-        ielts(message)
+        bot.send_message(message.chat.id, replys.get("ielts2"), reply_markup=delete)
+        bot.register_next_step_handler(message, country)
         
 # страна
 def country(message):
