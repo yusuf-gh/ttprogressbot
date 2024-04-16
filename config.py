@@ -1,7 +1,8 @@
 import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+import sqlite3
 
-token = '6349297067:AAHSS3iLXO_wgbKPhyusQ0xCO9ckdV5pwEs'
+token = ''
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
 
@@ -15,10 +16,30 @@ language = {
     
 }
 
+#переменные с информацией о пользователях
+grade = None
+have_ielts = None
+countryy = None
+contact = None
+
+
+
+
 
 #Приветствие
 @bot.message_handler(commands=["start"])
 def choose_lang(message):
+    conn = sqlite3.connect('db_client.sql')
+    cursor = conn.cursor()
+    
+    cursor.execute('CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY, grade varchar(50), have_ielts TEXT NOT NULL, country TEXT NOT NULL, contact TEXT NOT NULL )')
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    
+    
+    
     btn = ReplyKeyboardMarkup(resize_keyboard=True)
     btn.add(language['uz'], language['ru'])
     
@@ -49,11 +70,15 @@ def answer(message):
         return      
     
     bot.send_message(message.chat.id, replys.get('greeting'), reply_markup=delete)
-    bot.send_message(message.chat.id, replys.get('grade'))
+    bot.send_message(message.chat.id, replys.get('grade')) # вот тут вот запрос на то в каком классе либо курсе учится клиент
     bot.register_next_step_handler(message, ielts)
 
-# функция получает информацию о уровне английского пользователя 
+# функция выводит информацию о уровне английского пользователя 
 def ielts(message):
+    global grade
+    grade = message.text # школьник ? студент ? )))
+    
+    
     btn = ReplyKeyboardMarkup(resize_keyboard=True)
     btn.add(buttons.get('yes'), buttons.get('no'), buttons.get('preparing'))
     bot.send_message(message.chat.id, replys.get('ielts'), reply_markup=btn)
@@ -71,6 +96,8 @@ def ielts2(message):
         
 # страна
 def country(message):
+    global have_ielts
+    have_ielts = message.text # есть айлз?
     btn = ReplyKeyboardMarkup(resize_keyboard=True)
     btn.add(buttons.get('america'), buttons.get('europe')) 
     bot.send_message(message.chat.id, replys.get('country'), reply_markup=btn)
@@ -78,19 +105,62 @@ def country(message):
     
 # получение контакта пользователя 
 def contact1(message):
+    global countryy
     if message.text.lower() not in ['америка', 'европа', 'evropa', 'america']:  #полученный текст преобразуется в нижний регистер и проходит проверку
         bot.send_message(message.chat.id, replys.get('none'))
         country(message)
         
     else:
+        countryy = message.text # куда ты хочеш?
         btn = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton(text=buttons.get('share'), request_contact=True))
         bot.send_message(message.chat.id, replys.get('contact'), reply_markup=btn)
         bot.register_next_step_handler(message, conv_end)
 
 #пасибо за ответ
 def conv_end(message):
-    bot.send_message(message.chat.id, replys.get("thanks"), reply_markup=delete)
+    global grade, have_ielts, countryy, contact
+    if message.content_type == "contact":
+        contact = str(message.contact.phone_number)
+    else:
+        contact = message.text #номер пользователя
+        
+    
+    
+    conn = sqlite3.connect('db_client.sql')
+    cursor = conn.cursor()
+  
+    
+    #добавление в базу данных информацию о пользователях
+    cursor.execute("INSERT INTO Users (grade, have_ielts, country, contact) VALUES ('%s', '%s', '%s', '%s')" % (grade, have_ielts, countryy, contact))
+    conn.commit()
+    cursor.close()
+    conn.close()
 
+    
+    markup = telebot.types.InlineKeyboardMarkup()
+    markup.add(telebot.types.InlineKeyboardButton('Список пользователей', callback_data='users'))
+    bot.send_message(message.chat.id, replys.get("thanks"), reply_markup=markup)
+    
+@bot.callback_query_handler(func=lambda call: True)
+def callback(call):
+    conn = sqlite3.connect('db_client.sql')
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM Users")
+    users = cursor.fetchall()
+    
+    #вывод списка пользователей
+    info = ''
+    for el in users:
+        info += f" ID : {el[0]},\n Класс :{el[1]},\nIelts : {el[2]},\nСтрана : {el[3]},\nКонтакт : {el[4]} " #вывод списка пользователей
+        print(info)
+    
+    cursor.close()
+    conn.close()
+    
+    bot.send_message(call.message.chat.id, info)
 
 
 bot.infinity_polling()
+
+
