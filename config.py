@@ -16,10 +16,7 @@ language = {
 
 }
 
-grade = None
-have_ielts = None
-countryy = None
-contact = None
+
 
 
 # Приветствие
@@ -66,17 +63,38 @@ def answer(message):
 
 def get_name_func(message):
     info.update({"name": message.text})
+    btn = ReplyKeyboardMarkup(resize_keyboard=True)
+    btn.add(buttons.get("sch"), buttons.get("uni"))
     bot.send_message(message.chat.id,
-                     replys.get('grade'))  # вот тут вот запрос на то в каком классе либо курсе учится клиент
-    bot.register_next_step_handler(message, ielts)
+                     replys.get('grade'), reply_markup=btn)  # вот тут вот запрос на то в каком классе либо курсе учится клиент
+    bot.register_next_step_handler(message, grade_1)
 
+
+#студент либо школьник
+def grade_1(message):
+    if message.text == replys.get("uni"):
+        info.update({"статус": message.text})
+        bot.send_message(message.chat.id, replys.get("uni2"), reply_markup=delete)
+        bot.register_next_step_handler(message, ielts)
+        
+        
+    elif message.text == replys.get("sch"):
+        info.update({"статус": message.text})
+        bot.send_message(message.chat.id, replys.get("sch2"), reply_markup=delete)
+        bot.register_next_step_handler(message, ielts)
+    
+    else:
+        bot.send_message(message.chat.id,
+                         "Что то пошло не так, пожалуйста выберите предоставленный вариант "
+                         "ответа.\nKechirasiz xato yuz berdi, iltimos, taqdim etilgan javob "
+                         "variantlaridan birini tanlang.")
+        return
+    
 
 # функция выводит информацию о уровне английского пользователя
 def ielts(message):
-    global grade
-
-    info.update({"статус": message.text})  # школьник ? студент ? )))
-
+    info.update({"класс/курс": message.text})
+    
     btn = ReplyKeyboardMarkup(resize_keyboard=True)
     btn.add(buttons.get('yes'), buttons.get('no'), buttons.get('preparing'))
     bot.send_message(message.chat.id, replys.get('ielts'), reply_markup=btn)
@@ -130,6 +148,7 @@ def conv_end(message):
         bot.send_message(group_id, f"Имя: {info['name']}\n"
                                    f"Язык: {info['язык']}\n"
                                    f"Статус: {info['статус']}\n"
+                                   f"Класс/Курс:{info['класс/курс']}\n"
                                    f"Айлз: {info['айлз']}\n"
                                    f"Страна: {info['страна']}\n"
                                    f"Номер: {info['номер']}\n")
@@ -140,6 +159,7 @@ def conv_end(message):
         bot.send_message(group_id, f"Имя: {info['name']}\n"
                                    f"Язык: {info['язык']}\n"
                                    f"Статус: {info['статус']}\n"
+                                   f"Класс/Курс:{info['класс/курс']}\n"
                                    f"Айлз: {info['айлз']}\n"
                                    f"Страна: {info['страна']}\n"
                                    f"Номер: {info['номер']}\n")
