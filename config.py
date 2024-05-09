@@ -1,7 +1,8 @@
 import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+import re
 
-token = '6242109060:AAFtW5ckwhwUyEbqIQh3auxa6UTzVNrBLMY'
+token = '6782654814:AAGPAO6tqJHaETbVJynAki5mzEssLRzjr0I'
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
 group_id = "-1002075066553"
@@ -15,8 +16,6 @@ language = {
     'ru': KeyboardButton(text="Русский язык"),
 
 }
-
-
 
 
 # Приветствие
@@ -66,35 +65,36 @@ def get_name_func(message):
     btn = ReplyKeyboardMarkup(resize_keyboard=True)
     btn.add(buttons.get("sch"), buttons.get("uni"))
     bot.send_message(message.chat.id,
-                     replys.get('grade'), reply_markup=btn)  # вот тут вот запрос на то в каком классе либо курсе учится клиент
+                     replys.get('grade'),
+                     reply_markup=btn)  # вот тут вот запрос на то в каком классе либо курсе учится клиент
     bot.register_next_step_handler(message, grade_1)
 
 
-#студент либо школьник
+# студент либо школьник
 def grade_1(message):
     if message.text == replys.get("uni"):
         info.update({"статус": message.text})
         bot.send_message(message.chat.id, replys.get("uni2"), reply_markup=delete)
         bot.register_next_step_handler(message, ielts)
-        
-        
+
+
     elif message.text == replys.get("sch"):
         info.update({"статус": message.text})
         bot.send_message(message.chat.id, replys.get("sch2"), reply_markup=delete)
         bot.register_next_step_handler(message, ielts)
-    
+
     else:
         bot.send_message(message.chat.id,
                          "Что то пошло не так, пожалуйста выберите предоставленный вариант "
                          "ответа.\nKechirasiz xato yuz berdi, iltimos, taqdim etilgan javob "
                          "variantlaridan birini tanlang.")
         return
-    
+
 
 # функция выводит информацию о уровне английского пользователя
 def ielts(message):
     info.update({"класс/курс": message.text})
-    
+
     btn = ReplyKeyboardMarkup(resize_keyboard=True)
     btn.add(buttons.get('yes'), buttons.get('no'), buttons.get('preparing'))
     bot.send_message(message.chat.id, replys.get('ielts'), reply_markup=btn)
@@ -154,15 +154,23 @@ def conv_end(message):
                                    f"Номер: {info['номер']}\n")
 
     else:
-        info.update({"номер": message.text})
-        bot.send_message(message.chat.id, replys['thanks'], reply_markup=delete)
-        bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                   f"Язык: {info['язык']}\n"
-                                   f"Статус: {info['статус']}\n"
-                                   f"Класс/Курс:{info['класс/курс']}\n"
-                                   f"Айлз: {info['айлз']}\n"
-                                   f"Страна: {info['страна']}\n"
-                                   f"Номер: {info['номер']}\n")
+        if len(message.text) == 12 and re.match(r'^(998)[\d]{9}$', message.text):
+            info.update({
+                'номер': int(message.text)
+            })
+            bot.send_message(message.chat.id, replys['thanks'], reply_markup=delete)
+            bot.send_message(group_id, f"Имя: {info['name']}\n"
+                                       f"Язык: {info['язык']}\n"
+                                       f"Статус: {info['статус']}\n"
+                                       f"Класс/Курс:{info['класс/курс']}\n"
+                                       f"Айлз: {info['айлз']}\n"
+                                       f"Страна: {info['страна']}\n"
+                                       f"Номер: {info['номер']}\n")
+        else:
+            btn = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton(text=buttons.get('share'),
+                                                                               request_contact=True))
+            phone = bot.send_message(message.chat.id, replys["alert"], reply_markup=btn)
+            bot.register_next_step_handler(phone, conv_end)
 
 
 bot.infinity_polling()

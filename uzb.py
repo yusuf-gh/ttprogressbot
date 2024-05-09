@@ -6,6 +6,8 @@ reply1 : dict = {
     "greeting": "Assalomu aleykum!😊\nOzingiz xaqida ma'lumot bersangiz, siz bilan tez orada bog'lanamiz!",
     "grade": "Maktab o'quvchisi? Student?",
     "sch": "Maktab o'quvchisi",
+    "alert": "Nimadir hato ketdi. Katta ehtimol bilan raqam noto'g'ri. Iltimos, "
+             "raqamni tekshiring va qayta urinib ko'ring😊",
     "uni": "Student",
     "sch2": "Nechinchi sinifdasiz?",
     "uni2": "Nechinchi kursdasiz?",
