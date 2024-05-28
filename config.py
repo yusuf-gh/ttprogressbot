@@ -2,7 +2,7 @@ import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 import re
 
-token = '6782654814:AAGPAO6tqJHaETbVJynAki5mzEssLRzjr0I'
+token = '6242109060:AAHJ0gaat8YAgws7nQGZj890JaS3sSvMUs4'
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
 group_id = "-1002075066553"
@@ -62,95 +62,39 @@ def answer(message):
 
 def get_name_func(message):
     info.update({"name": message.text})
-    btn = ReplyKeyboardMarkup(resize_keyboard=True)
-    btn.add(buttons.get("sch"), buttons.get("uni"))
-    bot.send_message(message.chat.id,
-                     replys.get('grade'),
-                     reply_markup=btn)  # вот тут вот запрос на то в каком классе либо курсе учится клиент
-    bot.register_next_step_handler(message, grade_1)
-
-
-# студент либо школьник
-def grade_1(message):
-    if message.text == replys.get("uni"):
-        info.update({"статус": message.text})
-        bot.send_message(message.chat.id, replys.get("uni2"), reply_markup=delete)
-        bot.register_next_step_handler(message, ielts)
-
-
-    elif message.text == replys.get("sch"):
-        info.update({"статус": message.text})
-        bot.send_message(message.chat.id, replys.get("sch2"), reply_markup=delete)
-        bot.register_next_step_handler(message, ielts)
-
-    else:
-        bot.send_message(message.chat.id,
-                         "Что то пошло не так, пожалуйста выберите предоставленный вариант "
-                         "ответа.\nKechirasiz xato yuz berdi, iltimos, taqdim etilgan javob "
-                         "variantlaridan birini tanlang.")
-        return
-
-
-# функция выводит информацию о уровне английского пользователя
-def ielts(message):
-    info.update({"класс/курс": message.text})
-
-    btn = ReplyKeyboardMarkup(resize_keyboard=True)
-    btn.add(buttons.get('yes'), buttons.get('no'), buttons.get('preparing'))
+    btn = ReplyKeyboardMarkup(resize_keyboard=True).add(buttons['english1'], buttons['english2'], buttons['english3'],
+                                                        buttons['english4'])
     bot.send_message(message.chat.id, replys.get('ielts'), reply_markup=btn)
-    bot.register_next_step_handler(message, ielts2)
+    bot.register_next_step_handler(message, ielts)
 
 
-# обработка данных с функции выше
-def ielts2(message):
-    if message.text not in ['Ha', 'Да']:
-        country(message)
+def ielts(message):
+    info.update({"english": message.text})
+    btn = ReplyKeyboardMarkup(resize_keyboard=True).add(buttons["country1"], buttons["country2"], buttons["country3"],
+                                                        buttons["country4"], buttons["country5"], buttons["country6"])
 
-    else:
-        bot.send_message(message.chat.id, replys.get("ielts2"), reply_markup=delete)
-        bot.register_next_step_handler(message, country)
+    bot.send_message(message.chat.id, replys.get("country"), reply_markup=btn)
+    bot.register_next_step_handler(message, country)
 
 
-# страна
 def country(message):
-    global have_ielts
 
-    info.update({"айлз": message.text})  # есть айлз?
-    btn = ReplyKeyboardMarkup(resize_keyboard=True)
-    btn.add(buttons.get('america'), buttons.get('europe'))
-    bot.send_message(message.chat.id, replys.get('country'), reply_markup=btn)
-    bot.register_next_step_handler(message, contact1)
-
-
-# получение контакта пользователя 
-def contact1(message):
-    global countryy
-    if message.text.lower() not in ['америка', 'европа', 'evropa',
-                                    'america']:  # полученный текст преобразуется в нижний регистер и проходит проверку
-        bot.send_message(message.chat.id, replys.get('none'))
-        country(message)
-
-    else:
-
-        info.update({"страна": message.text})  # куда ты хочешь?
-        btn = ReplyKeyboardMarkup(resize_keyboard=True).add(
-            KeyboardButton(text=buttons.get('share'), request_contact=True))
-        bot.send_message(message.chat.id, replys.get('contact'), reply_markup=btn)
-        bot.register_next_step_handler(message, conv_end)
+    info.update({"country": message.text})
+    btn = ReplyKeyboardMarkup(resize_keyboard=True).add(
+        KeyboardButton(text=buttons.get('share'), request_contact=True))
+    bot.send_message(message.chat.id, replys.get('contact'), reply_markup=btn)
+    bot.register_next_step_handler(message, conv_end)
 
 
-# пасибо за ответ
+
 def conv_end(message):
-    global grade, have_ielts, countryy, contact
     if message.content_type == "contact":
         info.update({"номер": str(message.contact.phone_number)})
-        bot.send_message(message.chat.id, replys['thanks'], reply_markup=delete)
+        bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
         bot.send_message(group_id, f"Имя: {info['name']}\n"
                                    f"Язык: {info['язык']}\n"
-                                   f"Статус: {info['статус']}\n"
-                                   f"Класс/Курс:{info['класс/курс']}\n"
-                                   f"Айлз: {info['айлз']}\n"
-                                   f"Страна: {info['страна']}\n"
+                                   f"IELTS: {info['english']}\n"
+                                   f"Страна: {info['country']}\n"
                                    f"Номер: {info['номер']}\n")
 
     else:
@@ -158,19 +102,24 @@ def conv_end(message):
             info.update({
                 'номер': int(message.text)
             })
-            bot.send_message(message.chat.id, replys['thanks'], reply_markup=delete)
+            bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
             bot.send_message(group_id, f"Имя: {info['name']}\n"
                                        f"Язык: {info['язык']}\n"
-                                       f"Статус: {info['статус']}\n"
-                                       f"Класс/Курс:{info['класс/курс']}\n"
-                                       f"Айлз: {info['айлз']}\n"
-                                       f"Страна: {info['страна']}\n"
+                                       f"IELTS: {info['english']}\n"
+                                       f"Страна: {info['country']}\n"
                                        f"Номер: {info['номер']}\n")
         else:
             btn = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton(text=buttons.get('share'),
                                                                                request_contact=True))
             phone = bot.send_message(message.chat.id, replys["alert"], reply_markup=btn)
             bot.register_next_step_handler(phone, conv_end)
+
+
+
+
+
+
+
 
 
 bot.infinity_polling()
