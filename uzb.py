@@ -21,7 +21,14 @@ reply1: dict = {
     "greeting": "Assalomaleykum. Siz bilan aloqaga chiqishimiz uchun ushbu savollarga javob bering!",
     "country": "Qaysi Davlatga topshirmoqchisiz?",
     "intro": "Javoblaringiz uchun rahmat. Biz siz bilan tez orada aloqaga chiqamiz. "
-             "Biz bilan aloqaga chiqish uchun ushbu raqamga qo’ng’iroq qiling +998908260440"
+             "Biz bilan aloqaga chiqish uchun ushbu raqamga qo’ng’iroq qiling +998908260440",
+    "what": "Qaysi xizmatimizdan foydalanmoqchisiz?",
+
+    "answer1": "To’liq mentorlik xizmati",
+    "answer2": "Scholarship Bootcamp",
+    "answer3": "Research Bootcamp",
+    "answer4": "Activities Bootcamp",
+    "answer5": "1 soatlik ekspert Konsultatsiyaga yozilmoqchiman",
 }
 button1: dict = {
     "yes": KeyboardButton(text='Ha'),
@@ -44,4 +51,10 @@ button1: dict = {
     "country4": KeyboardButton(text='Germany'),
     "country5": KeyboardButton(text='Italy'),
     "country6": KeyboardButton(text='Turkiye'),
+
+    "func1": KeyboardButton(text="To’liq mentorlik xizmati"),
+    "func2": KeyboardButton(text="Scholarship Bootcamp"),
+    "func3": KeyboardButton(text="Research Bootcamp"),
+    "func4": KeyboardButton(text="Activities Bootcamp"),
+    "func5": KeyboardButton(text="1 soatlik ekspert Konsultatsiyaga yozilmoqchiman")
 }
