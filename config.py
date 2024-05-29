@@ -86,8 +86,9 @@ def country(message):
     bot.register_next_step_handler(message, conv_end)
 
 
-
 def conv_end(message):
+    btn = ReplyKeyboardMarkup().add(buttons['func1'], buttons['func2'], buttons['func3'], buttons['func4'],
+                                    buttons['func5'], )
     if message.content_type == "contact":
         info.update({"номер": str(message.contact.phone_number)})
         bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
@@ -96,6 +97,8 @@ def conv_end(message):
                                    f"IELTS: {info['english']}\n"
                                    f"Страна: {info['country']}\n"
                                    f"Номер: {info['номер']}\n")
+        a = bot.send_message(message.chat.id, replys['what'], reply_markup=btn)
+        bot.register_next_step_handler(a, function)
 
     else:
         if len(message.text) == 12 and re.match(r'^(998)[\d]{9}$', message.text):
@@ -108,6 +111,8 @@ def conv_end(message):
                                        f"IELTS: {info['english']}\n"
                                        f"Страна: {info['country']}\n"
                                        f"Номер: {info['номер']}\n")
+            a = bot.send_message(message.chat.id, replys['what'], reply_markup=btn)
+            bot.register_next_step_handler(a, function)
         else:
             btn = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton(text=buttons.get('share'),
                                                                                request_contact=True))
@@ -115,7 +120,17 @@ def conv_end(message):
             bot.register_next_step_handler(phone, conv_end)
 
 
-
+def function(message):
+    if message.text == replys['answer1']:
+        pass
+    elif message.text == replys['answer2']:
+        pass
+    elif message.text == replys['answer3']:
+        pass
+    elif message.text == replys['answer4']:
+        pass
+    elif message.text == replys['answer5']:
+        pass
 
 
 

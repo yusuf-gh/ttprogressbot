@@ -22,14 +22,21 @@ reply1: dict = {
     "greeting": "Здравствуйте! Ответьте на эти вопросы, чтобы мы могли связаться с вами",
     "country": "В какую страну вы бы хотели поступить?",
     "intro": "Спасибо за ваши ответы. Мы свяжемся с вами в ближайшее время."
-             " Если хотите связаться с нами, позвоните по номеру +998908260440"
+             " Если хотите связаться с нами, позвоните по номеру +998908260440",
+    "what": "Какими из наших услуг вы хотите воспользоваться?",
+
+    "answer1": "Полное Сопровождение",
+    "answer2": "Scholarship Bootcamp",
+    "answer3": "Research Bootcamp",
+    "answer4": "Activities Bootcamp",
+    "answer5": "Хочу записаться на 1-часовую консультацию специалиста",
 }
 button1: dict = {
     "yes": KeyboardButton(text='Да'),
     "no": KeyboardButton(text='Нет'),
     "sch": KeyboardButton(text='Школьник'),
     "uni": KeyboardButton(text='Студент'),
-    "preparing":KeyboardButton(text='Готовлюсь'),
+    "preparing": KeyboardButton(text='Готовлюсь'),
     "europe": KeyboardButton(text='Европа'),
     "america": KeyboardButton(text='Америка'),
     "share": 'Отправить контакт',
@@ -45,4 +52,11 @@ button1: dict = {
     "country4": KeyboardButton(text='Германия'),
     "country5": KeyboardButton(text='Италия'),
     "country6": KeyboardButton(text='Турция'),
+
+
+    "func1": KeyboardButton(text="Полное Сопровождение"),
+    "func2": KeyboardButton(text="Scholarship Bootcamp"),
+    "func3": KeyboardButton(text="Research Bootcamp"),
+    "func4": KeyboardButton(text="Activities Bootcamp"),
+    "func5": KeyboardButton(text="Хочу записаться на 1-часовую консультацию специалиста")
 }
