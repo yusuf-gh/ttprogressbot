@@ -2,7 +2,7 @@ import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 import re
 
-token = '6242109060:AAHJ0gaat8YAgws7nQGZj890JaS3sSvMUs4'
+token = '6242109060:AAGJXAtngp7IapFUjNZ1inum9e2ueT9Y_dw'
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
 group_id = "-1002075066553"
@@ -87,8 +87,7 @@ def country(message):
 
 
 def conv_end(message):
-    btn = ReplyKeyboardMarkup().add(buttons['func1'], buttons['func2'], buttons['func3'], buttons['func4'],
-                                    buttons['func5'], )
+    btn = ReplyKeyboardMarkup().add(buttons['func1'], buttons['func2'], buttons['func3'])
     if message.content_type == "contact":
         info.update({"номер": str(message.contact.phone_number)})
         bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
@@ -122,16 +121,27 @@ def conv_end(message):
 
 def function(message):
     if message.text == replys['answer1']:
-        pass
+        file_path = 'proRUS.pdf'
+        with open(file_path, 'rb') as file:
+            bot.send_document(message.chat.id, file, reply_markup=ReplyKeyboardRemove())
+            bot.send_message(group_id, f"Имя: {info['name']}\n"
+                                       f"Язык: {info['язык']}\n"
+                                       f"IELTS: {info['english']}\n"
+                                       f"Страна: {info['country']}\n"
+                                       f"Номер: {info['номер']}\n"
+                                       f"\n выбрал услугу [Полное сопровождение]")
+
     elif message.text == replys['answer2']:
         pass
     elif message.text == replys['answer3']:
-        pass
-    elif message.text == replys['answer4']:
-        pass
-    elif message.text == replys['answer5']:
-        pass
-
+        bot.send_message(message.chat.id, replys['consulting'], reply_markup=ReplyKeyboardRemove())
+        bot.send_message(message.chat.id, replys['call1'])
+        bot.send_message(group_id, f"Имя: {info['name']}\n"
+                                   f"Язык: {info['язык']}\n"
+                                   f"IELTS: {info['english']}\n"
+                                   f"Страна: {info['country']}\n"
+                                   f"Номер: {info['номер']}\n"
+                                   f"\n выбрал услугу [Хочу записаться на 1-часовую консультацию специалиста]")
 
 
 
