@@ -2,7 +2,7 @@ import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 import re
 
-token = '6242109060:AAGJXAtngp7IapFUjNZ1inum9e2ueT9Y_dw'
+token = '6782654814:AAEBvw8VJgGDzWN6DTeeQMs4GAY5BX7QneE'
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
 group_id = "-1002075066553"
