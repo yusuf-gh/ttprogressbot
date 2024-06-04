@@ -2,7 +2,7 @@ import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 import re
 
-token = '6782654814:AAEBvw8VJgGDzWN6DTeeQMs4GAY5BX7QneE'
+token = '6242109060:AAGJXAtngp7IapFUjNZ1inum9e2ueT9Y_dw'
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
 group_id = "-1002075066553"
@@ -62,7 +62,7 @@ def answer(message):
 
 def get_name_func(message):
     info.update({"name": message.text})
-    btn = ReplyKeyboardMarkup(resize_keyboard=True).add(buttons['english1'], buttons['english2'], buttons['english3'],
+    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['english1'], buttons['english2'], buttons['english3'],
                                                         buttons['english4'])
     bot.send_message(message.chat.id, replys.get('ielts'), reply_markup=btn)
     bot.register_next_step_handler(message, ielts)
@@ -70,7 +70,7 @@ def get_name_func(message):
 
 def ielts(message):
     info.update({"english": message.text})
-    btn = ReplyKeyboardMarkup(resize_keyboard=True).add(buttons["country1"], buttons["country2"], buttons["country3"],
+    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=3).add(buttons["country1"], buttons["country2"], buttons["country3"],
                                                         buttons["country4"], buttons["country5"], buttons["country6"])
 
     bot.send_message(message.chat.id, replys.get("country"), reply_markup=btn)
@@ -86,7 +86,7 @@ def country(message):
 
 
 def conv_end(message):
-    btn = ReplyKeyboardMarkup().add(buttons['func1'], buttons['func2'], buttons['func3'])
+    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['func1'], buttons['func2'], buttons['func3'])
     if message.content_type == "contact":
         info.update({"номер": str(message.contact.phone_number)})
         bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
@@ -104,11 +104,11 @@ def conv_end(message):
                 'номер': int(message.text)
             })
             bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
-            bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                       f"Язык: {info['язык']}\n"
-                                       f"IELTS: {info['english']}\n"
-                                       f"Страна: {info['country']}\n"
-                                       f"Номер: {info['номер']}\n")
+            # bot.send_message(group_id, f"Имя: {info['name']}\n"
+            #                            f"Язык: {info['язык']}\n"
+            #                            f"IELTS: {info['english']}\n"
+            #                            f"Страна: {info['country']}\n"
+            #                            f"Номер: {info['номер']}\n")
             a = bot.send_message(message.chat.id, replys['what'], reply_markup=btn)
             bot.register_next_step_handler(a, function)
         else:
@@ -120,7 +120,11 @@ def conv_end(message):
 
 def function(message):
     if message.text == replys['answer1']:
-        file_path = 'proRUS.pdf'
+        if info['язык'] == "O'zbek tili":
+            file_path = 'proUZB.pdf'
+        else:
+            file_path = 'proRUS.pdf'
+
         with open(file_path, 'rb') as file:
             bot.send_document(message.chat.id, file, reply_markup=ReplyKeyboardRemove())
             bot.send_message(group_id, f"Имя: {info['name']}\n"
@@ -132,7 +136,7 @@ def function(message):
             bot.send_message(message.chat.id, replys['call1'])
 
     elif message.text == replys['answer2']:
-        btn = ReplyKeyboardMarkup(resize_keyboard=True).add(buttons['funcmonth1'],
+        btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['funcmonth1'],
                                                             buttons['funcmonth2'], buttons['funcmonth3'])
         a = bot.send_message(message.chat.id, replys['cources'], reply_markup=btn)
         bot.register_next_step_handler(a, one_month)
