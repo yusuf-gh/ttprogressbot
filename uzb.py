@@ -25,10 +25,62 @@ reply1: dict = {
     "what": "Qaysi xizmatimizdan foydalanmoqchisiz?",
 
     "answer1": "To’liq mentorlik xizmati",
-    "answer2": "Scholarship Bootcamp",
-    "answer3": "Research Bootcamp",
-    "answer4": "Activities Bootcamp",
-    "answer5": "1 soatlik ekspert Konsultatsiyaga yozilmoqchiman",
+    "answer2": "1 oylik kurslar",
+    "answer3": "1 soatlik ekspert Konsultatsiyaga yozilmoqchiman",
+
+    "month1": "Scholarship Bootcamp",
+    "month2": "Research Bootcamp",
+    "month3": "Activities Bootcamp",
+
+    "call1": "Menejerimiz konsultatsiya vaqtini tasdiqlash uchun qisqa vaqt ichida sizga qo'ng'iroq qiladi",
+    "cources": 'Kursni tanlang',
+
+
+    "consulting": "Konsultatsiya quyidagilarni o'z ichiga oladi:\n\n"
+                  "✅ Qabul qilish imkoniyatini baholash;\n"
+                  "✅ Grant olish uchun keyingi qadamlaringiz;\n"
+                  "✅ Yo'nalishingizni biz aniqlaymiz;\n"
+                  "✅ Barcha savollaringizga javob beramiz;\n"
+                  "✅ Maslahat yakunida biz sizni toʻliq mentorlik uchun tariflarimiz bilan tanishtiramiz.\n"
+                  "🧑‍💻 Konsultatsiya onlayn yoki oflayn rejimda ofisda olib boriladi.\n"
+                  "⏰ Davomiyligi 60 min",
+
+    "consulting2": "Magistraturaga top 100 AQSh universitetlariga kirish uchun kurs birinchi marotaba o’zbek tilida! \n"
+                   "Ushbu kursda siz quyidagilarni o’rganasiz:\n"
+                   "1 Universitetlar ro’yhatini to’gri tuzish\n"
+                   "2 Shaxsiy brend ustida ishlash \n"
+                   "3 Statement of Purpose tuzish \n"
+                   "4 Rezume AQSh tizimi bo’yicha tuzish \n"
+                   "5 Email yozishni organish (Chat GPTsiz) \n"
+                   "6 Graduate assistantship programmalarga topshirishni organish \n"
+                   "7 Research Proposal yozish \n"
+                   "8 Application fee waiver olish \n"
+                   "9 Visa jarayoniga tayyorlanish\n"
+                   "10 Pre-arrival jarayoni\n"
+                   "Ushbu kurs orqali siz magistraturaga kirish uchun universitetlardan to’liq grant olishni"
+                   " o’rganasiz\n"
+                   "Ushbu kurs yordamida bizning studentlarimiz shu kungacha Carnegie Mellon, Boston University, "
+                   "PennState\n"
+                   " va shunga o’xshagan top Universitetlarga kirishgan.\n\n"
+                   "Darslar online tarzda zoom orqali live olib boriladi. \nNarxi 7,500,000 so’m",
+
+    "consulting3": "AQSh universitetlariga topshirishingiz uchun sizda 15 ta har xil yutuqlar bo’lishi kerakligini "
+                   "bilarmidingiz?\n"
+                   "Birinchi marta kompaniyamiz tarixida ushbu kursni siz uchun taqdim qilishga qaror qildik.\n\n\n"
+                   "Top #10 universitetlar uchun Shaxsiy brendni rivojlantirish kursi! Ushbu kursda siz 14 kun davomida"
+                   ":\n"
+                   "✅ Volonyerstvalar\n"
+                   "✅ Ijtimoiy proektlar\n"
+                   "✅ Konferensiyalar\n"
+                   "✅ Online kurslar\n"
+                   "✅ Olimpiadalar\n"
+                   "✅ Summer Camplar\n"
+                   "Va eng asosiysi ...\n"
+                   "⏰ Passion Project tuzish bo’yicha to’liq resurslar va yo’nalishlar olasiz.\n"
+                   "Ushbu kurs super intensive kurs bo’ladi va siz bizning to’liq mentorlikda studentlarimiz nimalar "
+                   "bilan shug’ullanishini 1 oy davomida kuzatasiz.\n"
+                   "Kurs narxi 1,500,000 so’m\n"
+                   "Darslar online tarzda zoom orqali live olib boriladi.",
 }
 button1: dict = {
     "yes": KeyboardButton(text='Ha'),
@@ -53,8 +105,10 @@ button1: dict = {
     "country6": KeyboardButton(text='Turkiye'),
 
     "func1": KeyboardButton(text="To’liq mentorlik xizmati"),
-    "func2": KeyboardButton(text="Scholarship Bootcamp"),
-    "func3": KeyboardButton(text="Research Bootcamp"),
-    "func4": KeyboardButton(text="Activities Bootcamp"),
-    "func5": KeyboardButton(text="1 soatlik ekspert Konsultatsiyaga yozilmoqchiman")
+    "func2": KeyboardButton(text="1 oylik kurslar"),
+    "func3": KeyboardButton(text="1 soatlik ekspert Konsultatsiyaga yozilmoqchiman"),
+
+    "funcmonth1": KeyboardButton(text="Scholarship Bootcamp"),
+    "funcmonth2": KeyboardButton(text="Research Bootcamp"),
+    "funcmonth3": KeyboardButton(text="Activities Bootcamp"),
 }

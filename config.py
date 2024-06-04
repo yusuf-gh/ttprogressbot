@@ -78,7 +78,6 @@ def ielts(message):
 
 
 def country(message):
-
     info.update({"country": message.text})
     btn = ReplyKeyboardMarkup(resize_keyboard=True).add(
         KeyboardButton(text=buttons.get('share'), request_contact=True))
@@ -130,9 +129,14 @@ def function(message):
                                        f"Страна: {info['country']}\n"
                                        f"Номер: {info['номер']}\n"
                                        f"\n выбрал услугу [Полное сопровождение]")
+            bot.send_message(message.chat.id, replys['call1'])
 
     elif message.text == replys['answer2']:
-        pass
+        btn = ReplyKeyboardMarkup(resize_keyboard=True).add(buttons['funcmonth1'],
+                                                            buttons['funcmonth2'], buttons['funcmonth3'])
+        a = bot.send_message(message.chat.id, replys['cources'], reply_markup=btn)
+        bot.register_next_step_handler(a, one_month)
+
     elif message.text == replys['answer3']:
         bot.send_message(message.chat.id, replys['consulting'], reply_markup=ReplyKeyboardRemove())
         bot.send_message(message.chat.id, replys['call1'])
@@ -144,7 +148,36 @@ def function(message):
                                    f"\n выбрал услугу [Хочу записаться на 1-часовую консультацию специалиста]")
 
 
+def one_month(message):
+    if message.text == replys['month1']:
+        bot.send_message(message.chat.id, replys['consulting2'], reply_markup=ReplyKeyboardRemove())
+        bot.send_message(message.chat.id, replys['call1'])
+        bot.send_message(group_id, f"Имя: {info['name']}\n"
+                                   f"Язык: {info['язык']}\n"
+                                   f"IELTS: {info['english']}\n"
+                                   f"Страна: {info['country']}\n"
+                                   f"Номер: {info['номер']}\n"
+                                   f"\n выбрал услугу [1-месячные курсы {replys['month1']}]")
 
+    elif message.text == replys['month2']:
+        bot.send_message(message.chat.id, replys['consulting3'], reply_markup=ReplyKeyboardRemove())
+        bot.send_message(message.chat.id, replys['call1'])
+        bot.send_message(group_id, f"Имя: {info['name']}\n"
+                                   f"Язык: {info['язык']}\n"
+                                   f"IELTS: {info['english']}\n"
+                                   f"Страна: {info['country']}\n"
+                                   f"Номер: {info['номер']}\n"
+                                   f"\n выбрал услугу [1-месячные курсы {replys['month2']}]")
+
+    elif message.text == replys['month3']:
+        bot.send_message(message.chat.id, replys['consulting2'], reply_markup=ReplyKeyboardRemove())
+        bot.send_message(message.chat.id, replys['call1'])
+        bot.send_message(group_id, f"Имя: {info['name']}\n"
+                                   f"Язык: {info['язык']}\n"
+                                   f"IELTS: {info['english']}\n"
+                                   f"Страна: {info['country']}\n"
+                                   f"Номер: {info['номер']}\n"
+                                   f"\n выбрал услугу [1-месячные курсы {replys['month3']}]")
 
 
 bot.infinity_polling()
