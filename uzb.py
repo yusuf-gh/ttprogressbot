@@ -18,7 +18,7 @@ reply1: dict = {
 
     "ielts": "Ingliz tili bilish darajangiz?",
     "name": "Ismingizni Yozing",
-    "greeting": "Assalomaleykum. Siz bilan aloqaga chiqishimiz uchun ushbu savollarga javob bering!",
+    "greeting": "Assalomu aleykum. Siz bilan aloqaga chiqishimiz uchun ushbu savollarga javob bering!",
     "country": "Qaysi Davlatga topshirmoqchisiz?",
     "intro": "Javoblaringiz uchun rahmat. Biz siz bilan tez orada aloqaga chiqamiz. "
              "Biz bilan aloqaga chiqish uchun ushbu raqamga qo’ng’iroq qiling +998908260440",
@@ -95,7 +95,7 @@ button1: dict = {
     "english1": KeyboardButton(text='Ingliz tilini bilmayman'),
     "english2": KeyboardButton(text='A1-B2/Intermediate/IELTS 5.5-6.5'),
     "english3": KeyboardButton(text='C1-C2/Advanced/IELTS 7.0-9.0'),
-    "english4": KeyboardButton(text='IELTSga tayyorlanayapman'),
+    "english4": KeyboardButton(text='IELTSga tayyorlanayabman'),
 
     "country1": KeyboardButton(text='USA'),
     "country2": KeyboardButton(text='Canada'),
