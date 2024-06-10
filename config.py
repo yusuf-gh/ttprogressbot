@@ -1,8 +1,12 @@
+import os
+
 import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 import re
+import requests
 
-token = '6782654814:AAGTNQim5K8guv0LQMoN342-QENytQZKJqs'
+token = '6242109060:AAHf3tDYZYkk5H4yzBNEGTJHkso4IZ5rcuE'
+backend = "https://tt.back-texnoprom.uz/data/"
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
 group_id = "-1002075066553"
@@ -62,16 +66,19 @@ def answer(message):
 
 def get_name_func(message):
     info.update({"name": message.text})
-    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['english1'], buttons['english2'], buttons['english3'],
-                                                        buttons['english4'])
+    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['english1'], buttons['english2'],
+                                                                     buttons['english3'],
+                                                                     buttons['english4'])
     bot.send_message(message.chat.id, replys.get('ielts'), reply_markup=btn)
     bot.register_next_step_handler(message, ielts)
 
 
 def ielts(message):
     info.update({"english": message.text})
-    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=3).add(buttons["country1"], buttons["country2"], buttons["country3"],
-                                                        buttons["country4"], buttons["country5"], buttons["country6"])
+    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=3).add(buttons["country1"], buttons["country2"],
+                                                                     buttons["country3"],
+                                                                     buttons["country4"], buttons["country5"],
+                                                                     buttons["country6"])
 
     bot.send_message(message.chat.id, replys.get("country"), reply_markup=btn)
     bot.register_next_step_handler(message, country)
@@ -86,7 +93,8 @@ def country(message):
 
 
 def conv_end(message):
-    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['func1'], buttons['func2'], buttons['func3'])
+    btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['func1'], buttons['func2'],
+                                                                     buttons['func3'])
     if message.content_type == "contact":
         info.update({"номер": str(message.contact.phone_number)})
         bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
@@ -104,11 +112,11 @@ def conv_end(message):
                 'номер': int(message.text)
             })
             bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
-            # bot.send_message(group_id, f"Имя: {info['name']}\n"
-            #                            f"Язык: {info['язык']}\n"
-            #                            f"IELTS: {info['english']}\n"
-            #                            f"Страна: {info['country']}\n"
-            #                            f"Номер: {info['номер']}\n")
+            bot.send_message(group_id, f"Имя: {info['name']}\n"
+                                       f"Язык: {info['язык']}\n"
+                                       f"IELTS: {info['english']}\n"
+                                       f"Страна: {info['country']}\n"
+                                       f"Номер: {info['номер']}\n")
             a = bot.send_message(message.chat.id, replys['what'], reply_markup=btn)
             bot.register_next_step_handler(a, function)
         else:
@@ -121,23 +129,45 @@ def conv_end(message):
 def function(message):
     if message.text == replys['answer1']:
         if info['язык'] == "O'zbek tili":
-            file_path = 'proUZB.pdf'
-        else:
-            file_path = 'proRUS.pdf'
+            response_get_webinar = requests.get(f"{backend}uzb/").json()
 
-        with open(file_path, 'rb') as file:
-            bot.send_document(message.chat.id, file, reply_markup=ReplyKeyboardRemove())
-            bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                       f"Язык: {info['язык']}\n"
-                                       f"IELTS: {info['english']}\n"
-                                       f"Страна: {info['country']}\n"
-                                       f"Номер: {info['номер']}\n"
-                                       f"\n выбрал услугу [Полное сопровождение]")
-            bot.send_message(message.chat.id, replys['call1'])
+        else:
+            response_get_webinar = requests.get(f"{backend}rus/").json()
+
+        try:
+
+            pdf_url = response_get_webinar[0]['date']
+
+            if pdf_url:
+                response = requests.get(pdf_url)
+
+                if response.status_code == 200:
+                    file_path = 'prosal.pdf'
+                    with open(file_path, 'wb') as f:
+                        f.write(response.content)
+
+                    with open(file_path, 'rb') as f:
+                        bot.send_document(message.chat.id, f, reply_markup=ReplyKeyboardRemove())
+                        os.remove(file_path)
+
+
+            else:
+                bot.send_message(message.chat.id, "PDF файл не найден в ответе сервера.")
+
+        except Exception as e:
+            bot.send_message(message.chat.id, f"Произошла ошибка: {str(e)}")
+
+        bot.send_message(message.chat.id, replys['call1'])
+        bot.send_message(group_id, f"Имя: {info['name']}\n"
+                                   f"Язык: {info['язык']}\n"
+                                   f"IELTS: {info['english']}\n"
+                                   f"Страна: {info['country']}\n"
+                                   f"Номер: {info['номер']}\n"
+                                   f"\n выбрал услугу [Полное сопровождение]")
 
     elif message.text == replys['answer2']:
         btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['funcmonth1'],
-                                                            buttons['funcmonth2'], buttons['funcmonth3'])
+                                                                         buttons['funcmonth2'], buttons['funcmonth3'])
         a = bot.send_message(message.chat.id, replys['cources'], reply_markup=btn)
         bot.register_next_step_handler(a, one_month)
 
