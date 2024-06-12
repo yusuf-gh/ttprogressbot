@@ -5,12 +5,17 @@ from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemo
 import re
 import requests
 
-token = '6782654814:AAHPl6AuORtsz7shQCoMHIFGZzmjYKfrsu4'
-backend = "https://tt.back-texnoprom.uz/data/"
+token = '6242109060:AAGzAu-Cqt8nDa30SOoTLNCHTKLoqd4NprI'
+backend = "http://127.0.0.1:8000/"
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
 group_id = "-1002075066553"
 info = dict({})
+info_post = {
+        "id": 0,
+        "username": None,
+        "language": 0
+    }
 
 replys: dict = {}
 buttons: dict = {}
@@ -27,6 +32,7 @@ language = {
 def choose_lang(message):
     btn = ReplyKeyboardMarkup(resize_keyboard=True)
     btn.add(language['uz'], language['ru'])
+    info_post.update({"id": message.chat.id})
 
     bot.send_message(message.chat.id, "Выберите язык\nTilni tanlang", reply_markup=btn)
 
@@ -43,6 +49,7 @@ def answer(message):
         replys.update(uzb_replay)
         buttons.update(uzb_button)
         info.update({"язык": "O'zbek tili"})
+        info_post.update({"language": 1})
 
     elif message.text == "Русский язык":
         from rus import reply1 as rus_reply
@@ -51,6 +58,7 @@ def answer(message):
         replys.update(rus_reply)
         buttons.update(rus_button)
         info.update({"язык": "Русский язык"})
+        info_post.update({"language": 2})
 
     else:
         bot.send_message(message.chat.id,
@@ -66,10 +74,12 @@ def answer(message):
 
 def get_name_func(message):
     info.update({"name": message.text})
+    info_post.update({"username": message.text})
     btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['english1'], buttons['english2'],
                                                                      buttons['english3'],
                                                                      buttons['english4'])
     bot.send_message(message.chat.id, replys.get('ielts'), reply_markup=btn)
+    a = requests.post(f"{backend}users", json=info_post)
     bot.register_next_step_handler(message, ielts)
 
 
@@ -98,11 +108,11 @@ def conv_end(message):
     if message.content_type == "contact":
         info.update({"номер": str(message.contact.phone_number)})
         bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
-        bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                   f"Язык: {info['язык']}\n"
-                                   f"IELTS: {info['english']}\n"
-                                   f"Страна: {info['country']}\n"
-                                   f"Номер: {info['номер']}\n")
+        # bot.send_message(group_id, f"Имя: {info['name']}\n"
+        #                            f"Язык: {info['язык']}\n"
+        #                            f"IELTS: {info['english']}\n"
+        #                            f"Страна: {info['country']}\n"
+        #                            f"Номер: {info['номер']}\n")
         a = bot.send_message(message.chat.id, replys['what'], reply_markup=btn)
         bot.register_next_step_handler(a, function)
 
@@ -112,11 +122,11 @@ def conv_end(message):
                 'номер': int(message.text)
             })
             bot.send_message(message.chat.id, replys['intro'], reply_markup=delete)
-            bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                       f"Язык: {info['язык']}\n"
-                                       f"IELTS: {info['english']}\n"
-                                       f"Страна: {info['country']}\n"
-                                       f"Номер: {info['номер']}\n")
+            # bot.send_message(group_id, f"Имя: {info['name']}\n"
+            #                            f"Язык: {info['язык']}\n"
+            #                            f"IELTS: {info['english']}\n"
+            #                            f"Страна: {info['country']}\n"
+            #                            f"Номер: {info['номер']}\n")
             a = bot.send_message(message.chat.id, replys['what'], reply_markup=btn)
             bot.register_next_step_handler(a, function)
         else:
@@ -129,10 +139,10 @@ def conv_end(message):
 def function(message):
     if message.text == replys['answer1']:
         if info['язык'] == "O'zbek tili":
-            response_get_webinar = requests.get(f"{backend}uzb/").json()
+            response_get_webinar = requests.get(f"{backend}data/uzb/").json()
 
         else:
-            response_get_webinar = requests.get(f"{backend}rus/").json()
+            response_get_webinar = requests.get(f"{backend}data/rus/").json()
 
         try:
 
@@ -158,12 +168,12 @@ def function(message):
             bot.send_message(message.chat.id, f"Произошла ошибка: {str(e)}")
 
         bot.send_message(message.chat.id, replys['call1'])
-        bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                   f"Язык: {info['язык']}\n"
-                                   f"IELTS: {info['english']}\n"
-                                   f"Страна: {info['country']}\n"
-                                   f"Номер: {info['номер']}\n"
-                                   f"\n выбрал услугу [Полное сопровождение]")
+        # bot.send_message(group_id, f"Имя: {info['name']}\n"
+        #                            f"Язык: {info['язык']}\n"
+        #                            f"IELTS: {info['english']}\n"
+        #                            f"Страна: {info['country']}\n"
+        #                            f"Номер: {info['номер']}\n"
+        #                            f"\n выбрал услугу [Полное сопровождение]")
 
     elif message.text == replys['answer2']:
         btn = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2).add(buttons['funcmonth1'],
@@ -174,44 +184,44 @@ def function(message):
     elif message.text == replys['answer3']:
         bot.send_message(message.chat.id, replys['consulting'], reply_markup=ReplyKeyboardRemove())
         bot.send_message(message.chat.id, replys['call1'])
-        bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                   f"Язык: {info['язык']}\n"
-                                   f"IELTS: {info['english']}\n"
-                                   f"Страна: {info['country']}\n"
-                                   f"Номер: {info['номер']}\n"
-                                   f"\n выбрал услугу [Хочу записаться на 1-часовую консультацию специалиста]")
+        # bot.send_message(group_id, f"Имя: {info['name']}\n"
+        #                            f"Язык: {info['язык']}\n"
+        #                            f"IELTS: {info['english']}\n"
+        #                            f"Страна: {info['country']}\n"
+        #                            f"Номер: {info['номер']}\n"
+        #                            f"\n выбрал услугу [Хочу записаться на 1-часовую консультацию специалиста]")
 
 
 def one_month(message):
     if message.text == replys['month1']:
         bot.send_message(message.chat.id, replys['consulting2'], reply_markup=ReplyKeyboardRemove())
         bot.send_message(message.chat.id, replys['call1'])
-        bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                   f"Язык: {info['язык']}\n"
-                                   f"IELTS: {info['english']}\n"
-                                   f"Страна: {info['country']}\n"
-                                   f"Номер: {info['номер']}\n"
-                                   f"\n выбрал услугу [1-месячные курсы {replys['month1']}]")
+        # bot.send_message(group_id, f"Имя: {info['name']}\n"
+        #                            f"Язык: {info['язык']}\n"
+        #                            f"IELTS: {info['english']}\n"
+        #                            f"Страна: {info['country']}\n"
+        #                            f"Номер: {info['номер']}\n"
+        #                            f"\n выбрал услугу [1-месячные курсы {replys['month1']}]")
 
     elif message.text == replys['month2']:
         bot.send_message(message.chat.id, replys['consulting3'], reply_markup=ReplyKeyboardRemove())
         bot.send_message(message.chat.id, replys['call1'])
-        bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                   f"Язык: {info['язык']}\n"
-                                   f"IELTS: {info['english']}\n"
-                                   f"Страна: {info['country']}\n"
-                                   f"Номер: {info['номер']}\n"
-                                   f"\n выбрал услугу [1-месячные курсы {replys['month2']}]")
+        # bot.send_message(group_id, f"Имя: {info['name']}\n"
+        #                            f"Язык: {info['язык']}\n"
+        #                            f"IELTS: {info['english']}\n"
+        #                            f"Страна: {info['country']}\n"
+        #                            f"Номер: {info['номер']}\n"
+        #                            f"\n выбрал услугу [1-месячные курсы {replys['month2']}]")
 
     elif message.text == replys['month3']:
         bot.send_message(message.chat.id, replys['consulting2'], reply_markup=ReplyKeyboardRemove())
         bot.send_message(message.chat.id, replys['call1'])
-        bot.send_message(group_id, f"Имя: {info['name']}\n"
-                                   f"Язык: {info['язык']}\n"
-                                   f"IELTS: {info['english']}\n"
-                                   f"Страна: {info['country']}\n"
-                                   f"Номер: {info['номер']}\n"
-                                   f"\n выбрал услугу [1-месячные курсы {replys['month3']}]")
+        # bot.send_message(group_id, f"Имя: {info['name']}\n"
+        #                            f"Язык: {info['язык']}\n"
+        #                            f"IELTS: {info['english']}\n"
+        #                            f"Страна: {info['country']}\n"
+        #                            f"Номер: {info['номер']}\n"
+        #                            f"\n выбрал услугу [1-месячные курсы {replys['month3']}]")
 
 
 bot.infinity_polling()
