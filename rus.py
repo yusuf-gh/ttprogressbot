@@ -19,7 +19,7 @@ reply1: dict = {
     "greeting": "Здравствуйте! Ответьте на эти вопросы, чтобы мы могли связаться с вами",
     "country": "В какую страну вы бы хотели поступить?",
     "intro": "Спасибо за ваши ответы. Мы свяжемся с вами в ближайшее время."
-             " Если хотите связаться с нами, позвоните по номеру +998908260440",
+             " Если хотите связаться с нами, позвоните по номеру: \n+998908260440 \n+998908264004",
     "what": "Какими из наших услуг вы хотите воспользоваться?",
 
     "answer1": "Полное Сопровождение",
@@ -59,7 +59,7 @@ reply1: dict = {
                    "Ushbu kurs yordamida bizning studentlarimiz shu kungacha Carnegie Mellon, Boston University, "
                    "PennState\n"
                    " va shunga o’xshagan top Universitetlarga kirishgan.\n\n"
-                   "Darslar online tarzda zoom orqali live olib boriladi. \nNarxi 7,500,000 so’m",
+                   "Darslar online tarzda zoom orqali live olib boriladi.",
 
     "consulting3": "AQSh universitetlariga topshirishingiz uchun sizda 15 ta har xil yutuqlar bo’lishi kerakligini "
                    "bilarmidingiz?\n"
@@ -108,4 +108,6 @@ button1: dict = {
     "funcmonth1": KeyboardButton(text="Scholarship Bootcamp"),
     "funcmonth2": KeyboardButton(text="Research Bootcamp"),
     "funcmonth3": KeyboardButton(text="Activities Bootcamp"),
+
+    'back': KeyboardButton(text="Вернуться к услугам")
 }
