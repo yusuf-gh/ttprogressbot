@@ -79,7 +79,6 @@ reply1: dict = {
                    "⏰ Passion Project tuzish bo’yicha to’liq resurslar va yo’nalishlar olasiz.\n"
                    "Ushbu kurs super intensive kurs bo’ladi va siz bizning to’liq mentorlikda studentlarimiz nimalar "
                    "bilan shug’ullanishini 1 oy davomida kuzatasiz.\n"
-                   "Kurs narxi 1,500,000 so’m\n"
                    "Darslar online tarzda zoom orqali live olib boriladi.",
 }
 button1: dict = {

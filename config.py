@@ -5,7 +5,7 @@ from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemo
 import re
 import requests
 
-token = '6782654814:AAGuEoqutCmw1AG0xrQn7INXEmuyG1HK-Rw'
+token = '7076107389:AAGEHQfpMve_ohCze5PTB_NK9cnaMaVXFCE'
 backend = "https://tt.back-texnoprom.uz/"
 bot = telebot.TeleBot(token)
 delete = ReplyKeyboardRemove()
